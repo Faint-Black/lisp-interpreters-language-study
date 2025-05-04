@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "include/foo.h"
+#include "include/global.h"
 
 int main(void)
 {
-    printf("Hello world! %d\n", Foo(21, 21));
+    printf("Hello World! %lu\n", TRILLION);
     return 0;
 }

@@ -22,6 +22,12 @@ CheckOptions:
   - key: readability-identifier-length.MinimumParameterNameLength
     value: "1"                   # Disable minimum parameter name length
   - key: readability-identifier-naming.ParameterCase
-    value: lower_case            # Set function parameters to lowercase
+    value: lower_case            # Function parameters <- foobarbaz
   - key: readability-identifier-naming.FunctionCase
-    value: Camel_Snake_Case      # Set function names to Camel_Snake_Case
+    value: Camel_Snake_Case      # Function names <- Foo_Bar_Baz
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase             # Enum typedefs <- FooBarBaz
+  - key: readability-identifier-naming.EnumConstantCase
+    value: UPPER_CASE            # Enum element <- FOO_BAR_BAZ
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase             # Struct typedefs <- FooBarBaz

@@ -32,3 +32,6 @@
 
 # CMake files
 build/
+
+# Clang files
+.cache
