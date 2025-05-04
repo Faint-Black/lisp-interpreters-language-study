@@ -1,5 +1,10 @@
 #include "include/global.h"
 
+/* assert 64-bit CPU */
+#if !defined(ARCH_64)
+#error "64-bit exclusive application!"
+#endif
+
 int main(void)
 {
     Log_Msg("this is a log");
