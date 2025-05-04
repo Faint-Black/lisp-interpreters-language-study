@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 /* detect operating system */
 #if defined(_WIN32) || defined(_WIN64)
@@ -48,8 +49,7 @@ typedef unsigned char  byte;
 typedef unsigned short word;
 typedef unsigned int   dword;
 typedef unsigned long  qword;
-typedef unsigned long  size_t;
-typedef enum
+typedef enum ErrorCode
 {
     ERRORCODE_NO_ERROR = 0, /* no current error in effect */
     ERRORCODE_GENERAL_ERROR /* error with no further description */
@@ -61,5 +61,9 @@ extern ErrorCode global_error_code;
 /* global functions */
 extern ErrorCode Get_Error(void);
 extern void      Set_Error(ErrorCode code);
+extern void      Log_Msg(const char* msg);
+extern void      Warn_Msg(const char* msg);
+extern void      Error_Msg(const char* msg);
+extern void      Fatal_Error_Msg(const char* msg);
 
 #endif /* GLOBAL_H */
