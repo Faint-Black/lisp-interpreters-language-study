@@ -13,10 +13,15 @@
 
 int main(void)
 {
-    char   buf[MAX_BUFFER_SIZE];
-    Token* lexed_token_array;
+    const char* input_str;
+    char        buf[MAX_BUFFER_SIZE];
+    Token*      lexed_token_array;
 
-    lexed_token_array = Lex_Text("'(foo(+ 1.4 2) (- 3 45)) . (bar)");
+    input_str = "(if (eql (+ 20 22) 69)\n"
+                "    t\n"
+                "  nil)\n";
+
+    lexed_token_array = Lex_Text(input_str);
     if (lexed_token_array == NULL)
     {
         sprintf(buf, "lexing failed with error message \"%s\"", Get_Error());

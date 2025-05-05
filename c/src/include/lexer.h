@@ -11,6 +11,8 @@ typedef enum TokenType
     PTT_SYMBOL,               /* foo */
     PTT_LITERAL_INTEGRAL_NUM, /* 42 */
     PTT_LITERAL_FLOATING_NUM, /* 4.2 */
+    PTT_TRUE,                 /* t */
+    PTT_FALSE,                /* nil */
     PTT_EOF                   /* End Of File */
 } TokenType;
 

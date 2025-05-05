@@ -15,12 +15,15 @@ static Token Dot_Token(void);
 static Token Quote_Token(void);
 static Token Int_Token(long num);
 static Token Float_Token(float num);
+static Token Boolean_Token(int t_or_nil);
 static Token String_To_Token(const char* str);
 static void  Destroy_Token(Token tk);
 static void  Append_Token(Token* tk_arr, size_t* size, Token tk);
+static char* Uppercase_String_Copy(const char* str);
 
 Token* Lex_Text(const char* str)
 {
+    char*        normalized_str;
     Token*       result;
     Token        token_buf[MAX_BUFFER_SIZE];
     char         string_buf[MAX_BUFFER_SIZE];
@@ -44,11 +47,13 @@ Token* Lex_Text(const char* str)
     token_bufsize = 0;
     /* init parenthesis depth variable */
     paren_depth = 0;
+    /* init string to be processed */
+    normalized_str = Uppercase_String_Copy(str);
 
     /* main parsing loop */
-    for (i = 0; i < strlen(str); i++)
+    for (i = 0; i < strlen(normalized_str); i++)
     {
-        c = str[i];
+        c = normalized_str[i];
 
         /* very liberal when it comes to naming symbols */
         if (Is_Valid_Lisp_Symbol_Character(c))
@@ -86,6 +91,8 @@ Token* Lex_Text(const char* str)
     Append_Token(token_buf, &token_bufsize, EOF_Token());
     result = (Token*)malloc(token_bufsize * sizeof(Token));
     memcpy(result, token_buf, token_bufsize * sizeof(Token));
+    /* free locally allocated data */
+    free(normalized_str);
     return result;
 }
 
@@ -155,6 +162,12 @@ void Print_Token_Array(Token* tk_arr)
             sprintf(buf, "Floating token of value %f", tk_arr[i].value.floating);
             Log_Msg(buf);
             break;
+        case PTT_TRUE:
+            Log_Msg("'t' token");
+            break;
+        case PTT_FALSE:
+            Log_Msg("'nil' token");
+            break;
         case PTT_EOF:
             Log_Msg("EOF token");
             quit = true;
@@ -181,19 +194,8 @@ static Token Undefined_Token(void)
 static Token Symbol_Token(const char* str)
 {
     Token result;
-
-    /* str length limited to the buffer max size */
-    char* dup = NULL;
-    char  buf[MAX_BUFFER_SIZE];
-    /* copy input string into fixed size buffer */
-    strncpy(buf, str, MAX_BUFFER_SIZE);
-    buf[MAX_BUFFER_SIZE - 1] = '\0';
-    /* create an allocated duplicate of the buffer contents */
-    dup = malloc((strlen(buf) + 1) * sizeof(char));
-    memcpy(dup, buf, (strlen(buf) + 1));
-
     result.type = PTT_SYMBOL;
-    result.value.symbol = dup;
+    result.value.symbol = Dup_Str(str);
     return result;
 }
 
@@ -258,6 +260,23 @@ static Token Float_Token(float num)
     return result;
 }
 
+/* returns a T token or a NIL token, depending on the input */
+static Token Boolean_Token(int t_or_nil)
+{
+    Token result;
+    if (t_or_nil)
+    {
+        result.type = PTT_TRUE;
+        result.value.integral = 1;
+    }
+    else
+    {
+        result.type = PTT_FALSE;
+        result.value.integral = 0;
+    }
+    return result;
+}
+
 /* decides how to interpret a string into a token, examples:
  * "." -> dot operator token.
  * "42" -> integer literal 42 token.
@@ -273,6 +292,14 @@ static Token String_To_Token(const char* str)
     if (!strcmp(str, "."))
     {
         return Dot_Token();
+    }
+    else if (!strcmp(str, "T"))
+    {
+        return Boolean_Token(true);
+    }
+    else if (!strcmp(str, "NIL"))
+    {
+        return Boolean_Token(false);
     }
     else if ((has_dot == true) && (sscanf(str, "%f", &floating_num) == 1))
     {
@@ -302,4 +329,16 @@ static void Append_Token(Token* tk_arr, size_t* size, Token tk)
 {
     tk_arr[*size] = tk;
     ++*size;
+}
+
+/* creates a duplicate of the input string with all characters as uppercase */
+static char* Uppercase_String_Copy(const char* str)
+{
+    char*  copy = Dup_Str(str);
+    size_t i;
+    for (i = 0; i < strlen(copy); i++)
+    {
+        copy[i] = To_Uppercase(str[i]);
+    }
+    return copy;
 }

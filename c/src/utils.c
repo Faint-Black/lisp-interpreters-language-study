@@ -1,4 +1,20 @@
 #include "include/utils.h"
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* duplicates a string into allocated memory */
+char* Dup_Str(const char* str)
+{
+    char* result;
+    if (str == NULL)
+    {
+        return NULL;
+    }
+    result = malloc((strlen(str) + 1) * sizeof(char));
+    memcpy(result, str, (strlen(str) + 1));
+    return result;
+}
 
 /* non allowed characters:
  * double quotes("), single quotes('), any parentheses or bracket, and backslash(\)
@@ -30,4 +46,17 @@ int Has_Dot_Char(const char* str)
         str++;
     }
     return false;
+}
+
+/* [a..z] -> [A..Z] */
+char To_Uppercase(char c)
+{
+    if ((c >= 'a') && (c <= 'z'))
+    {
+        return (char)(c - 32);
+    }
+    else
+    {
+        return c;
+    }
 }
