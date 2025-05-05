@@ -13,7 +13,7 @@ PointerAlignment: Left                      # Align pointer symbol with type ("i
 UseTab: Never                               # Only use spaces, no tabs
 
 # Control the alignment of various elements
-AlignConsecutiveAssignments: true
+AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
 BreakBeforeBinaryOperators: NonAssignment

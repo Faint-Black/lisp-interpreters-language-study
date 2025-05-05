@@ -2,39 +2,39 @@
 #include <stdio.h>
 
 /* global variable definitions and initializations */
-ErrorCode global_error_code = ERRORCODE_NO_ERROR;
+const char* global_error_code = NULL;
 
 /* translation-unit local global variables */
 #ifdef OS_LINUX
-const char* reset        = "\033[0m";
-const char* black        = "\033[0;30m";
-const char* red          = "\033[0;31m";
-const char* green        = "\033[0;32m";
-const char* yellow       = "\033[0;33m";
-const char* blue         = "\033[0;34m";
-const char* magenta      = "\033[0;35m";
-const char* cyan         = "\033[0;36m";
-const char* white        = "\033[0;37m";
-const char* bold_black   = "\033[1;30m";
-const char* bold_red     = "\033[1;31m";
-const char* bold_green   = "\033[1;32m";
-const char* bold_yellow  = "\033[1;33m";
-const char* bold_blue    = "\033[1;34m";
+const char* reset = "\033[0m";
+const char* black = "\033[0;30m";
+const char* red = "\033[0;31m";
+const char* green = "\033[0;32m";
+const char* yellow = "\033[0;33m";
+const char* blue = "\033[0;34m";
+const char* magenta = "\033[0;35m";
+const char* cyan = "\033[0;36m";
+const char* white = "\033[0;37m";
+const char* bold_black = "\033[1;30m";
+const char* bold_red = "\033[1;31m";
+const char* bold_green = "\033[1;32m";
+const char* bold_yellow = "\033[1;33m";
+const char* bold_blue = "\033[1;34m";
 const char* bold_magenta = "\033[1;35m";
-const char* bold_cyan    = "\033[1;36m";
-const char* bold_white   = "\033[1;37m";
+const char* bold_cyan = "\033[1;36m";
+const char* bold_white = "\033[1;37m";
 #endif
 
 /* returns the current error code */
-ErrorCode Get_Error(void)
+const char* Get_Error(void)
 {
     return global_error_code;
 }
 
 /* sets the error to the input code */
-void Set_Error(ErrorCode code)
+void Set_Error(const char* msg)
 {
-    global_error_code = code;
+    global_error_code = msg;
 }
 
 /* display a buffered LOG message to stdout */
@@ -75,4 +75,14 @@ void Fatal_Error_Msg(const char* msg)
 #else
     fprintf(stderr, "FATAL: %s.\n", msg);
 #endif
+}
+
+/* non allowed characters:
+ * double quotes("), single quotes('), any parentheses or bracket, and backslash(\)
+ * dots must be manually handled as for fractional numbers and (car . cdr)
+ */
+int Is_Valid_Lisp_Symbol_Character(char c)
+{
+    return ((c == '!') || ((c >= 35) && (c <= 38)) || ((c >= 42) && (c <= 90))
+            || ((c >= 94) && (c <= 122)));
 }

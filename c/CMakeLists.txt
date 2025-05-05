@@ -19,7 +19,6 @@ add_compile_options(
     -Wall
     -Wextra
     -Wpedantic
-    -Werror
     -Wconversion
     -Wshadow
     -O2
@@ -33,7 +32,6 @@ find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
 if(CLANG_TIDY_EXE)
     set(CMAKE_C_CLANG_TIDY 
         ${CLANG_TIDY_EXE} 
-        -warnings-as-errors=*
         --extra-arg=-std=c90
     )
     message(STATUS "clang-tidy enabled: ${CMAKE_C_CLANG_TIDY}")

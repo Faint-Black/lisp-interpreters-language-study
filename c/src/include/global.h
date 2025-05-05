@@ -1,9 +1,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <stdbool.h>
-#include <stddef.h>
-
 /* detect operating system */
 #if defined(_WIN32) || defined(_WIN64)
 #define OS_WINDOWS
@@ -49,21 +46,17 @@ typedef unsigned char  byte;
 typedef unsigned short word;
 typedef unsigned int   dword;
 typedef unsigned long  qword;
-typedef enum ErrorCode
-{
-    ERRORCODE_NO_ERROR = 0, /* no current error in effect */
-    ERRORCODE_GENERAL_ERROR /* error with no further description */
-} ErrorCode;
 
 /* global variables */
-extern ErrorCode global_error_code;
+extern const char* global_error_code;
 
 /* global functions */
-extern ErrorCode Get_Error(void);
-extern void      Set_Error(ErrorCode code);
-extern void      Log_Msg(const char* msg);
-extern void      Warn_Msg(const char* msg);
-extern void      Error_Msg(const char* msg);
-extern void      Fatal_Error_Msg(const char* msg);
+extern const char* Get_Error(void);
+extern void        Set_Error(const char* msg);
+extern void        Log_Msg(const char* msg);
+extern void        Warn_Msg(const char* msg);
+extern void        Error_Msg(const char* msg);
+extern void        Fatal_Error_Msg(const char* msg);
+extern int         Is_Valid_Lisp_Symbol_Character(char c);
 
 #endif /* GLOBAL_H */
