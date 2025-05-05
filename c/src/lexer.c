@@ -1,5 +1,6 @@
 #include "include/lexer.h"
 #include "include/global.h"
+#include "include/utils.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,8 +18,6 @@ static Token Float_Token(float num);
 static Token String_To_Token(const char* str);
 static void  Destroy_Token(Token tk);
 static void  Append_Token(Token* tk_arr, size_t* size, Token tk);
-static void  Append_Char(char* c_arr, size_t* size, char c);
-static int   Has_Dot_Char(const char* str);
 
 Token* Lex_Text(const char* str)
 {
@@ -303,28 +302,4 @@ static void Append_Token(Token* tk_arr, size_t* size, Token tk)
 {
     tk_arr[*size] = tk;
     ++*size;
-}
-
-/* appends char to a char buffer, automatically deals with the null terminator */
-static void Append_Char(char* c_arr, size_t* size, char c)
-{
-    c_arr[*size] = c;
-    ++*size;
-    c_arr[*size] = '\0';
-}
-
-/* checks if a string has a dot character,
- * used to determine if a number is a float or int
- */
-static int Has_Dot_Char(const char* str)
-{
-    while (*str)
-    {
-        if ((*str) == '.')
-        {
-            return true;
-        }
-        str++;
-    }
-    return false;
 }

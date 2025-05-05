@@ -76,13 +76,3 @@ void Fatal_Error_Msg(const char* msg)
     fprintf(stderr, "FATAL: %s.\n", msg);
 #endif
 }
-
-/* non allowed characters:
- * double quotes("), single quotes('), any parentheses or bracket, and backslash(\)
- * dots must be manually handled as for fractional numbers and (car . cdr)
- */
-int Is_Valid_Lisp_Symbol_Character(char c)
-{
-    return ((c == '!') || ((c >= 35) && (c <= 38)) || ((c >= 42) && (c <= 90))
-            || ((c >= 94) && (c <= 122)));
-}

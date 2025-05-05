@@ -57,6 +57,5 @@ extern void        Log_Msg(const char* msg);
 extern void        Warn_Msg(const char* msg);
 extern void        Error_Msg(const char* msg);
 extern void        Fatal_Error_Msg(const char* msg);
-extern int         Is_Valid_Lisp_Symbol_Character(char c);
 
 #endif /* GLOBAL_H */

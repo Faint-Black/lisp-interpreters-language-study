@@ -8,7 +8,6 @@
 #endif
 
 /* TODO: dynamic arrays */
-/* TODO: utils file */
 /* TODO: abstract syntax tree */
 /* TODO: evaluator */
 
