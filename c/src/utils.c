@@ -17,8 +17,12 @@ char* Dup_Str(const char* str)
 }
 
 /* non allowed characters:
- * double quotes("), single quotes('), any parentheses or bracket, and backslash(\)
- * dots must be manually handled as for fractional numbers and (car . cdr)
+ * double quotes("), reserved for string literals
+ * single quotes('), reserved for the quote operator
+ * any parentheses or bracket
+ * backslash(\), reserved for future use in special characters
+ * dots(.) are allowed due to floating point literals, so they must
+ * be manually handled to differentiate them from dotted pairs (car . cdr)
  */
 int Is_Valid_Lisp_Symbol_Character(char c)
 {

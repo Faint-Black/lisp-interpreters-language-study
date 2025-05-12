@@ -29,6 +29,11 @@
 #define ARCH_UNKNOWN
 #endif
 
+/* assert 64-bit CPU architecture */
+#if !defined(ARCH_64)
+#error "64-bit exclusive application!"
+#endif
+
 /* general-use constants */
 #define PI       3.14159265358979323846L
 #define EULER    2.71828L

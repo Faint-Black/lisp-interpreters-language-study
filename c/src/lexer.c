@@ -51,7 +51,7 @@ Token* Lex_Text(const char* str)
     normalized_str = Uppercase_String_Copy(str);
 
     /* main parsing loop */
-    for (i = 0; i < strlen(normalized_str); i++)
+    for (i = 0; i < strlen(normalized_str) + 1; i++)
     {
         c = normalized_str[i];
 
@@ -99,20 +99,27 @@ Token* Lex_Text(const char* str)
 /* deallocate contents of all tokens in an EOF terminated token array */
 void Destroy_Token_Array(Token* tk_arr)
 {
-    int i = 0;
+    size_t len = Get_Token_Array_Len(tk_arr);
+    size_t i;
+    for (i = 0; i < len; i++)
+    {
+        Destroy_Token(tk_arr[i]);
+    }
+}
+
+/* returns the index of the EOF token */
+size_t Get_Token_Array_Len(Token* tk_arr)
+{
+    size_t i = 0;
     if (tk_arr == NULL)
     {
-        return;
+        return 0;
     }
     while (true)
     {
         if (tk_arr[i].type == PTT_EOF)
         {
-            break;
-        }
-        else
-        {
-            Destroy_Token(tk_arr[i]);
+            return i;
         }
         i++;
     }

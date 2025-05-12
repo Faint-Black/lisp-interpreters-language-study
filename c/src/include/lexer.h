@@ -1,6 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include <stdio.h>
+
 typedef enum TokenType
 {
     PTT_UNDEFINED = 0,        /* default init value */
@@ -29,6 +31,7 @@ typedef struct Token
 
 extern Token* Lex_Text(const char* str);
 extern void   Destroy_Token_Array(Token* tk_arr);
+extern size_t Get_Token_Array_Len(Token* tk_arr);
 extern void   Print_Token_Array(Token* tk_arr);
 
 #endif /* LEXER_H */
