@@ -139,44 +139,40 @@ void Print_Token_Array(Token* tk_arr)
     {
         switch (tk_arr[i].type)
         {
-        case PTT_UNDEFINED:
-            Log_Msg("Undefined token, aborting print.");
-            quit = true;
-            break;
         case PTT_L_PAREN:
-            sprintf(buf, "'(' of depth %li", tk_arr[i].value.integral);
+            sprintf(buf, "TOKEN: '(' of depth %li", tk_arr[i].value.integral);
             Log_Msg(buf);
             break;
         case PTT_R_PAREN:
-            sprintf(buf, "')' of depth %li", tk_arr[i].value.integral);
+            sprintf(buf, "TOKEN: ')' of depth %li", tk_arr[i].value.integral);
             Log_Msg(buf);
             break;
         case PTT_DOT:
-            Log_Msg("Dot token");
+            Log_Msg("TOKEN: Dot operator");
             break;
         case PTT_QUOTE:
-            Log_Msg("Quote token");
+            Log_Msg("TOKEN: Quote operator");
             break;
         case PTT_SYMBOL:
-            sprintf(buf, "Symbol token \"%s\"", tk_arr[i].value.symbol);
+            sprintf(buf, "TOKEN: Symbol of name \"%s\"", tk_arr[i].value.symbol);
             Log_Msg(buf);
             break;
         case PTT_LITERAL_INTEGRAL_NUM:
-            sprintf(buf, "Integer token of value %li", tk_arr[i].value.integral);
+            sprintf(buf, "TOKEN: Integer number of value %li", tk_arr[i].value.integral);
             Log_Msg(buf);
             break;
         case PTT_LITERAL_FLOATING_NUM:
-            sprintf(buf, "Floating token of value %f", tk_arr[i].value.floating);
+            sprintf(buf, "TOKEN: Floating number of value %f", tk_arr[i].value.floating);
             Log_Msg(buf);
             break;
         case PTT_TRUE:
-            Log_Msg("'t' token");
+            Log_Msg("TOKEN: 't'");
             break;
         case PTT_FALSE:
-            Log_Msg("'nil' token");
+            Log_Msg("TOKEN: 'nil'");
             break;
         case PTT_EOF:
-            Log_Msg("EOF token");
+            Log_Msg("TOKEN: EOF");
             quit = true;
             break;
         default:

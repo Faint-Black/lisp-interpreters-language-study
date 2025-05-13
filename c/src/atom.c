@@ -1,6 +1,5 @@
 #include "include/atom.h"
 #include "include/global.h"
-#include "include/lisp.h"
 #include "include/utils.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -8,29 +7,29 @@
 /* print one atom to stdout */
 void Print_Atom(Atom atom)
 {
+    char buf[MAX_BUFFER_SIZE];
     switch (atom.type)
     {
     case ATOMTYPE_T:
-        printf("t");
+        Log_Msg("ATOM: t");
         break;
     case ATOMTYPE_NIL:
-        printf("nil");
+        Log_Msg("ATOM: nil");
         break;
     case ATOMTYPE_INTEGER:
-        printf("%li", atom.value.integral);
+        sprintf(buf, "ATOM: integral %li", atom.value.integral);
+        Log_Msg(buf);
         break;
     case ATOMTYPE_FLOAT:
-        printf("%.4f", atom.value.floating);
+        sprintf(buf, "ATOM: real %.4f", atom.value.floating);
+        Log_Msg(buf);
         break;
     case ATOMTYPE_SYMBOL:
-        printf("%s", atom.value.symbol);
+        sprintf(buf, "ATOM: symbol \"%s\"", atom.value.symbol);
+        Log_Msg(buf);
         break;
-    case ATOMTYPE_PAIR:
-        printf("(");
-        Print_Atom(Lisp_Car(atom));
-        printf(" . ");
-        Print_Atom(Lisp_Cdr(atom));
-        printf(")");
+    default:
+        Error_Msg("ATOM: Printing of this type not implemented yet!");
         break;
     }
 }

@@ -34,6 +34,7 @@ int main(void)
     }
 
     /* output phase */
+    Print_Token_Array(lexed_token_array);
     Print_Atom(parsed_atom);
     printf("\n");
 
