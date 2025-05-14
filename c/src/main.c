@@ -8,6 +8,12 @@
 /* TODO: abstract syntax tree */
 /* TODO: evaluator */
 
+/* TODO: S-Expression are ALREADY implemented!
+ *       i just need to finalize the list recursive parsing functions
+ */
+
+/* TODO: Print_Fn -> Get_Str_Fn */
+
 int main(void)
 {
     const char* input_str;

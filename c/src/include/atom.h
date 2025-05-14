@@ -19,11 +19,11 @@ typedef struct Atom
         long         integral;
         float        floating;
         const char*  symbol;
-        struct Pair* pair;
+        struct Cons* cons_cell;
     } value;
 } Atom;
 
-typedef struct Pair
+typedef struct Cons
 {
     struct Atom atom[2];
 } Pair;
