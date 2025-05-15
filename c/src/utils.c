@@ -59,8 +59,5 @@ char To_Uppercase(char c)
     {
         return (char)(c - 32);
     }
-    else
-    {
-        return c;
-    }
+    return c;
 }

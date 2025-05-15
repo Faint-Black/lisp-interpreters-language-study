@@ -16,10 +16,7 @@ static Token Peek(Token* tokens, size_t size);
 static Token Consume(Token* tokens, size_t* size);
 static bool  Match(Token* tokens, size_t* size, TokenType target);
 
-/* quick helper functions */
-static void Append_Atom(Atom* atom_arr, size_t* size, Atom atom);
-
-/* TODO: A proper lisp program may contain multiple sexprs,
+/* TODO: A proper lisp program may contain multiple s-exprs,
  * for example:
  *
  * (setq x 42)         ; sexpr #1
@@ -46,32 +43,44 @@ static Atom Parse_Expression(Token* tokens, size_t* counter)
     switch (current_token.type)
     {
     case PTT_QUOTE:
+        /* details above the function's definition */
         Consume(tokens, counter);
         return Parse_Quote(tokens, counter);
         break;
     case PTT_L_PAREN:
+        /* consume '(', then parse and return right expression */
         Consume(tokens, counter);
         return Parse_List(tokens, counter);
         break;
     case PTT_SYMBOL:
+        /* consume and return 'foo' */
         Consume(tokens, counter);
         return Symbol_Atom(current_token.value.symbol);
         break;
     case PTT_TRUE:
+        /* consume and return 't' */
         Consume(tokens, counter);
         return T_Atom();
         break;
     case PTT_FALSE:
+        /* consume and return 'nil' */
         Consume(tokens, counter);
         return Nil_Atom();
         break;
     case PTT_LITERAL_INTEGRAL_NUM:
+        /* consume and return '42' */
         Consume(tokens, counter);
         return Int_Atom(current_token.value.integral);
         break;
     case PTT_LITERAL_FLOATING_NUM:
+        /* consume and return '1337.42' */
         Consume(tokens, counter);
         return Float_Atom(current_token.value.floating);
+        break;
+    case PTT_R_PAREN:
+        /* all ')' are supposed to be consumed at the list parsers */
+        Set_Error("caught closing parenthesis during parsing");
+        return Nil_Atom();
         break;
     default:
         Set_Error("unknown token");
@@ -80,12 +89,12 @@ static Atom Parse_Expression(Token* tokens, size_t* counter)
     }
 }
 
-/* TODO */
+/* syntatic sugar for turning 'A into (quote A) */
 static Atom Parse_Quote(Token* tokens, size_t* counter)
 {
-    Fatal_Error_Msg("not implemented yet");
-    Consume(tokens, counter);
-    return Int_Atom(42);
+    Atom quote_atom = Symbol_Atom("quote");
+    Atom right_expression = Parse_Expression(tokens, counter);
+    return Lisp_Cons(quote_atom, Lisp_Cons(right_expression, Nil_Atom()));
 }
 
 /* recursively goes through parenthesis lists and dotted pairs */
@@ -94,6 +103,7 @@ static Atom Parse_List(Token* tokens, size_t* counter)
     Atom car;
     Atom cdr;
 
+    /* (A B C) => [A]->[B]->[C]->nil */
     if (Match(tokens, counter, PTT_R_PAREN))
     {
         return Nil_Atom();
@@ -113,7 +123,6 @@ static Atom Parse_List(Token* tokens, size_t* counter)
     }
 
     /* (A B C D ...) */
-    car = Parse_Expression(tokens, counter);
     cdr = Parse_List(tokens, counter);
     return Lisp_Cons(car, cdr);
 }

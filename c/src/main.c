@@ -19,7 +19,7 @@ int main(void)
     Atom   parsed_atom;
 
     /* get input */
-    input_str = Dup_Str("(A . (B . (C . nil)))");
+    input_str = Dup_Str("'(A B C)");
 
     /* lexing phase */
     lexed_token_array = Lex_Text(input_str);
