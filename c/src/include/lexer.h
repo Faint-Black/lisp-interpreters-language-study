@@ -32,6 +32,6 @@ typedef struct Token
 extern Token* Lex_Text(const char* str);
 extern void   Destroy_Token_Array(Token* tk_arr);
 extern size_t Get_Token_Array_Len(Token* tk_arr);
-extern void   Print_Token_Array(Token* tk_arr);
+extern void   Bufprint_Token_Array(char* buf, Token* tk_arr);
 
 #endif /* LEXER_H */

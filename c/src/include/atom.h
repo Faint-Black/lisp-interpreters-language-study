@@ -28,7 +28,8 @@ typedef struct Cons
     struct Atom atom[2];
 } Pair;
 
-extern void Print_Atom(Atom atom);
+extern void Bufprint_Sexpr(char* buf, Atom atom);
+extern Atom Create_Atom_Copy(Atom atom);
 extern Atom T_Atom(void);
 extern Atom Nil_Atom(void);
 extern Atom Int_Atom(long num);

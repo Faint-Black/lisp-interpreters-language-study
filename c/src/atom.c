@@ -1,37 +1,43 @@
 #include "include/atom.h"
 #include "include/global.h"
+#include "include/lisp.h"
 #include "include/utils.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-/* print one atom to stdout */
-void Print_Atom(Atom atom)
+static void Recursive_Bufprint_Sexpr(int depth, char* buf, Atom atom);
+
+/* logs all atoms onto a single string put at the input buf */
+void Bufprint_Sexpr(char* buf, Atom atom)
 {
-    char buf[MAX_BUFFER_SIZE];
+    strncpy(buf, "Logging S-EXPRESSIONS;\n", MAX_GLOBAL_BUFFER_SIZE);
+    Recursive_Bufprint_Sexpr(0, buf, atom);
+}
+
+/* allocates contents of input atom into new returned atom */
+Atom Create_Atom_Copy(Atom atom)
+{
+    /* TODO: be able to copy lists */
+    Atom copy;
+    copy.type = atom.type;
+
     switch (atom.type)
     {
-    case ATOMTYPE_T:
-        Log_Msg("ATOM: t");
-        break;
-    case ATOMTYPE_NIL:
-        Log_Msg("ATOM: nil");
-        break;
-    case ATOMTYPE_INTEGER:
-        sprintf(buf, "ATOM: integral %li", atom.value.integral);
-        Log_Msg(buf);
-        break;
-    case ATOMTYPE_FLOAT:
-        sprintf(buf, "ATOM: real %.4f", atom.value.floating);
-        Log_Msg(buf);
-        break;
     case ATOMTYPE_SYMBOL:
-        sprintf(buf, "ATOM: symbol \"%s\"", atom.value.symbol);
-        Log_Msg(buf);
+        copy.value.symbol = Dup_Str(atom.value.symbol);
+        break;
+    case ATOMTYPE_PAIR:
+        Fatal_Error_Msg("cons cells atoms copy not implemented yet!");
+        Set_Error("bad copy");
+        copy = Nil_Atom();
         break;
     default:
-        Error_Msg("ATOM: Printing of this type not implemented yet!");
+        copy.value = atom.value;
         break;
     }
+
+    return copy;
 }
 
 /* returns a boolean true atom */
@@ -77,4 +83,50 @@ Atom Symbol_Atom(const char* name)
     result.type = ATOMTYPE_SYMBOL;
     result.value.symbol = Dup_Str(name);
     return result;
+}
+
+static void Recursive_Bufprint_Sexpr(int depth, char* buf, Atom atom)
+{
+    char temp_buf[MAX_LOCAL_BUFFER_SIZE];
+    int  i;
+
+    temp_buf[0] = '\0';
+    for (i = 0; i < depth; i++)
+    {
+        temp_buf[i + 0] = '|';
+        temp_buf[i + 1] = '-';
+        temp_buf[i + 2] = ' ';
+        temp_buf[i + 3] = '\0';
+    }
+    strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
+
+    switch (atom.type)
+    {
+    case ATOMTYPE_T:
+        sprintf(temp_buf, "non-empty list (t)\n");
+        break;
+    case ATOMTYPE_NIL:
+        sprintf(temp_buf, "empty list (nil)\n");
+        break;
+    case ATOMTYPE_INTEGER:
+        sprintf(temp_buf, "integral (%li)\n", atom.value.integral);
+        break;
+    case ATOMTYPE_FLOAT:
+        sprintf(temp_buf, "real (%.4f)\n", atom.value.floating);
+        break;
+    case ATOMTYPE_SYMBOL:
+        sprintf(temp_buf, "symbol (\"%s\")\n", atom.value.symbol);
+        break;
+    case ATOMTYPE_PAIR:
+        sprintf(temp_buf, "PAIR\n");
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
+        Recursive_Bufprint_Sexpr(depth + 1, buf, Lisp_Car(atom));
+        Recursive_Bufprint_Sexpr(depth + 1, buf, Lisp_Cdr(atom));
+        temp_buf[0] = '\0';
+        break;
+    default:
+        sprintf(temp_buf, "Printing of this type not implemented yet!\n");
+        break;
+    }
+    strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
 }

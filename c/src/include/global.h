@@ -43,8 +43,9 @@
 #define TRILLION 1000000000000UL
 
 /* size related constants */
-#define MAX_FILE_SIZE   (1 * MILLION)
-#define MAX_BUFFER_SIZE 512
+#define MAX_FILE_SIZE          (1 * MILLION)
+#define MAX_LOCAL_BUFFER_SIZE  512
+#define MAX_GLOBAL_BUFFER_SIZE 65536
 
 /* typedefs */
 typedef unsigned char  byte;
@@ -53,6 +54,7 @@ typedef unsigned int   dword;
 typedef unsigned long  qword;
 
 /* global variables */
+extern char        buffer[MAX_GLOBAL_BUFFER_SIZE];
 extern const char* global_error_code;
 
 /* global functions */

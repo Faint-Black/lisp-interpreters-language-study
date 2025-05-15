@@ -14,13 +14,14 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-# Enable warnings and optimizations
+# Enable (most) warnings and optimizations
 add_compile_options(
     -Wall
     -Wextra
     -Wpedantic
     -Wconversion
     -Wshadow
+    -Wno-unused-function
     -O2
 )
 

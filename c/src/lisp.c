@@ -2,8 +2,8 @@
 #include "include/atom.h"
 #include <stdlib.h>
 
-static Atom* Car(Atom atom);
-static Atom* Cdr(Atom atom);
+static Atom* Internal_CAR(Atom atom);
+static Atom* Internal_CDR(Atom atom);
 
 /* returns the car of a pair */
 Atom Lisp_Car(Atom atom)
@@ -24,8 +24,8 @@ Atom Lisp_Cons(Atom car, Atom cdr)
     result.type = ATOMTYPE_PAIR;
     /* TODO: deallocate when done */
     result.value.cons_cell = malloc(sizeof(Pair));
-    *Car(result) = car;
-    *Cdr(result) = cdr;
+    *Internal_CAR(result) = car;
+    *Internal_CDR(result) = cdr;
     return result;
 }
 
@@ -43,13 +43,13 @@ Atom Lisp_Nullp(Atom atom)
 }
 
 /* returns address of the cons cell's car */
-static Atom* Car(Atom atom)
+static Atom* Internal_CAR(Atom atom)
 {
     return &atom.value.cons_cell->atom[0];
 }
 
 /* returns address of the cons cell's cdr */
-static Atom* Cdr(Atom atom)
+static Atom* Internal_CDR(Atom atom)
 {
     return &atom.value.cons_cell->atom[1];
 }

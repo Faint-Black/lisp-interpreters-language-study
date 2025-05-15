@@ -4,6 +4,6 @@
 #include "atom.h"
 #include "lexer.h"
 
-extern Atom Tokens_To_Atom(Token* tk_arr);
+extern Atom Tokens_To_Sexpr(Token* tk_arr);
 
 #endif /* PARSER_H */

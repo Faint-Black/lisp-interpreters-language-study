@@ -25,8 +25,8 @@ Token* Lex_Text(const char* str)
 {
     char*        normalized_str;
     Token*       result;
-    Token        token_buf[MAX_BUFFER_SIZE];
-    char         string_buf[MAX_BUFFER_SIZE];
+    Token        token_buf[MAX_LOCAL_BUFFER_SIZE];
+    char         string_buf[MAX_LOCAL_BUFFER_SIZE];
     size_t       token_bufsize;
     size_t       string_bufsize;
     unsigned int paren_depth;
@@ -125,12 +125,16 @@ size_t Get_Token_Array_Len(Token* tk_arr)
     }
 }
 
-/* logs all individual tokens and their contents */
-void Print_Token_Array(Token* tk_arr)
+/* logs all individual tokens into a single string put at the input buf */
+void Bufprint_Token_Array(char* buf, Token* tk_arr)
 {
-    char buf[MAX_BUFFER_SIZE];
+    char temp_buf[MAX_LOCAL_BUFFER_SIZE];
     int  i = 0;
     bool quit = false;
+
+    /* prepare input buffer for concatenation */
+    strncpy(buf, "Logging TOKENS;\n", MAX_GLOBAL_BUFFER_SIZE);
+
     if (tk_arr == NULL)
     {
         return;
@@ -140,46 +144,42 @@ void Print_Token_Array(Token* tk_arr)
         switch (tk_arr[i].type)
         {
         case PTT_L_PAREN:
-            sprintf(buf, "TOKEN: '(' of depth %li", tk_arr[i].value.integral);
-            Log_Msg(buf);
+            sprintf(temp_buf, "TOKEN: '(' of depth %li\n", tk_arr[i].value.integral);
             break;
         case PTT_R_PAREN:
-            sprintf(buf, "TOKEN: ')' of depth %li", tk_arr[i].value.integral);
-            Log_Msg(buf);
+            sprintf(temp_buf, "TOKEN: ')' of depth %li\n", tk_arr[i].value.integral);
             break;
         case PTT_DOT:
-            Log_Msg("TOKEN: Dot operator");
+            sprintf(temp_buf, "TOKEN: Dot operator\n");
             break;
         case PTT_QUOTE:
-            Log_Msg("TOKEN: Quote operator");
+            sprintf(temp_buf, "TOKEN: Quote operator\n");
             break;
         case PTT_SYMBOL:
-            sprintf(buf, "TOKEN: Symbol of name \"%s\"", tk_arr[i].value.symbol);
-            Log_Msg(buf);
+            sprintf(temp_buf, "TOKEN: Symbol of name \"%s\"\n", tk_arr[i].value.symbol);
             break;
         case PTT_LITERAL_INTEGRAL_NUM:
-            sprintf(buf, "TOKEN: Integer number of value %li", tk_arr[i].value.integral);
-            Log_Msg(buf);
+            sprintf(temp_buf, "TOKEN: Integer number of value %li\n", tk_arr[i].value.integral);
             break;
         case PTT_LITERAL_FLOATING_NUM:
-            sprintf(buf, "TOKEN: Floating number of value %f", tk_arr[i].value.floating);
-            Log_Msg(buf);
+            sprintf(temp_buf, "TOKEN: Floating number of value %f\n", tk_arr[i].value.floating);
             break;
         case PTT_TRUE:
-            Log_Msg("TOKEN: 't'");
+            sprintf(temp_buf, "TOKEN: 't'\n");
             break;
         case PTT_FALSE:
-            Log_Msg("TOKEN: 'nil'");
+            sprintf(temp_buf, "TOKEN: 'nil'\n");
             break;
         case PTT_EOF:
-            Log_Msg("TOKEN: EOF");
+            sprintf(temp_buf, "TOKEN: EOF\n");
             quit = true;
             break;
         default:
-            Log_Msg("Unknown token, aborting print.");
+            sprintf(temp_buf, "Unknown token, aborting print.\n");
             quit = true;
             break;
         }
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
         i++;
     }
 }

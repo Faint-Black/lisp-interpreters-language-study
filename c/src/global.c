@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 /* global variable definitions and initializations */
+char        buffer[MAX_GLOBAL_BUFFER_SIZE];
 const char* global_error_code = NULL;
 
 /* translation-unit local global variables */

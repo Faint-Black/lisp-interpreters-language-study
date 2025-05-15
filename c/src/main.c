@@ -17,32 +17,32 @@
 int main(void)
 {
     const char* input_str;
-    char        buf[MAX_BUFFER_SIZE];
     Token*      lexed_token_array;
     Atom        parsed_atom;
 
-    input_str = "1337.42";
+    input_str = "(+ (* 1 5) 2)";
 
     /* lexing phase */
     lexed_token_array = Lex_Text(input_str);
     if (Get_Error())
     {
-        sprintf(buf, "lexing failed with error message \"%s\"", Get_Error());
-        Fatal_Error_Msg(buf);
+        sprintf(buffer, "lexing failed with error message \"%s\"", Get_Error());
+        Fatal_Error_Msg(buffer);
     }
 
     /* parsing phase */
-    parsed_atom = Tokens_To_Atom(lexed_token_array);
+    parsed_atom = Tokens_To_Sexpr(lexed_token_array);
     if (Get_Error())
     {
-        sprintf(buf, "parsing failed with error message \"%s\"", Get_Error());
-        Fatal_Error_Msg(buf);
+        sprintf(buffer, "parsing failed with error message \"%s\"", Get_Error());
+        Fatal_Error_Msg(buffer);
     }
 
     /* output phase */
-    Print_Token_Array(lexed_token_array);
-    Print_Atom(parsed_atom);
-    printf("\n");
+    Bufprint_Token_Array(buffer, lexed_token_array);
+    Log_Msg(buffer);
+    Bufprint_Sexpr(buffer, parsed_atom);
+    Log_Msg(buffer);
 
     /* cleanup phase */
     Destroy_Token_Array(lexed_token_array);
