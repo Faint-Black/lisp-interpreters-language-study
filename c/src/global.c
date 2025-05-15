@@ -42,9 +42,9 @@ void Set_Error(const char* msg)
 void Log_Msg(const char* msg)
 {
 #ifdef OS_LINUX
-    fprintf(stdout, "%sLOG%s: %s.\n", bold_blue, reset, msg);
+    fprintf(stdout, "%sLOG%s: %s\n", bold_blue, reset, msg);
 #else
-    fprintf(stdout, "LOG: %s.\n", msg);
+    fprintf(stdout, "LOG: %s\n", msg);
 #endif
 }
 
@@ -52,9 +52,9 @@ void Log_Msg(const char* msg)
 void Warn_Msg(const char* msg)
 {
 #ifdef OS_LINUX
-    fprintf(stderr, "%sWARNING%s: %s.\n", bold_yellow, reset, msg);
+    fprintf(stderr, "%sWARNING%s: %s\n", bold_yellow, reset, msg);
 #else
-    fprintf(stderr, "WARNING: %s.\n", msg);
+    fprintf(stderr, "WARNING: %s\n", msg);
 #endif
 }
 
@@ -62,9 +62,9 @@ void Warn_Msg(const char* msg)
 void Error_Msg(const char* msg)
 {
 #ifdef OS_LINUX
-    fprintf(stderr, "%sERROR%s: %s.\n", red, reset, msg);
+    fprintf(stderr, "%sERROR%s: %s\n", red, reset, msg);
 #else
-    fprintf(stderr, "ERROR: %s.\n", msg);
+    fprintf(stderr, "ERROR: %s\n", msg);
 #endif
 }
 
@@ -72,8 +72,8 @@ void Error_Msg(const char* msg)
 void Fatal_Error_Msg(const char* msg)
 {
 #ifdef OS_LINUX
-    fprintf(stderr, "%sFATAL%s: %s.\n", bold_red, reset, msg);
+    fprintf(stderr, "%sFATAL%s: %s\n", bold_red, reset, msg);
 #else
-    fprintf(stderr, "FATAL: %s.\n", msg);
+    fprintf(stderr, "FATAL: %s\n", msg);
 #endif
 }
