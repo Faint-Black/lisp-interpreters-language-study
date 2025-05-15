@@ -1,3 +1,14 @@
+/*******************************************************************************
+ *
+ *   +-------+
+ *   | LEXER | - translation unit file
+ *   +-------+
+ *
+ *  Responsible for turning the input Lisp source, a raw character string, into
+ * usable tokens loaded into memory.
+ *
+ ******************************************************************************/
+
 #include "include/lexer.h"
 #include "include/global.h"
 #include "include/utils.h"

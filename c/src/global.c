@@ -1,3 +1,14 @@
+/*******************************************************************************
+ *
+ *   +--------+
+ *   | GLOBAL | - translation unit file
+ *   +--------+
+ *
+ *  Defines global functions, variables, typedefs and macros for use across all
+ * source files on the project.
+ *
+ ******************************************************************************/
+
 #include "include/global.h"
 #include <stdio.h>
 

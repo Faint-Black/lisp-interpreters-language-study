@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *
+ *   +-------+
+ *   | UTILS | - translation unit file
+ *   +-------+
+ *
+ *  Various helper functions that don't exactly fit being inside global.
+ *
+ ******************************************************************************/
+
 #include "include/utils.h"
 #include <stddef.h>
 #include <stdlib.h>

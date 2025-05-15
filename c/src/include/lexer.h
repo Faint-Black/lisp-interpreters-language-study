@@ -1,5 +1,15 @@
 #ifndef LEXER_H
 #define LEXER_H
+/*******************************************************************************
+ *
+ *   +-------+
+ *   | LEXER | - header file
+ *   +-------+
+ *
+ *  Responsible for turning the input Lisp source, a raw character string, into
+ * usable tokens loaded into memory.
+ *
+ ******************************************************************************/
 
 #include <stdio.h>
 

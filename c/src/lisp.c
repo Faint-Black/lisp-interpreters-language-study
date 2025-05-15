@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *
+ *   +------+
+ *   | LISP | - translation unit file
+ *   +------+
+ *
+ *  Defines this Lisp implementation's builtin functions.
+ *
+ ******************************************************************************/
+
 #include "include/lisp.h"
 #include "include/atom.h"
 #include <stdlib.h>

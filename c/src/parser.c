@@ -1,3 +1,14 @@
+/*******************************************************************************
+ *
+ *   +--------+
+ *   | PARSER | - translation unit file
+ *   +--------+
+ *
+ *  Responsible for turning the lexed tokens into *unevaluated* Lisp
+ * S-Expressions.
+ *
+ ******************************************************************************/
+
 #include "include/parser.h"
 #include "include/atom.h"
 #include "include/global.h"

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ *
+ *   +------+
+ *   | MAIN | - entry point
+ *   +------+
+ *
+ *  Codebase licensed under GPLv3, build instructions in README.
+ *
+ ******************************************************************************/
+
 #include "include/atom.h"
 #include "include/global.h"
 #include "include/lexer.h"
@@ -6,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* TODO: humanly readable S-Expression prints */
 /* TODO: global allocation pool */
 /* TODO: dynamic arrays */
 /* TODO: evaluator */
@@ -19,7 +30,7 @@ int main(void)
     Atom   parsed_atom;
 
     /* get input */
-    input_str = Dup_Str("'(A B C)");
+    input_str = Dup_Str("(setq foo 42)");
 
     /* lexing phase */
     lexed_token_array = Lex_Text(input_str);

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ *
+ *   +------+
+ *   | ATOM | - translation unit file
+ *   +------+
+ *
+ *  Defines the primitive atom/list/s-expression Lisp data types and procedures,
+ * as well as their printing.
+ *
+ ******************************************************************************/
+
 #include "include/atom.h"
 #include "include/global.h"
 #include "include/lisp.h"

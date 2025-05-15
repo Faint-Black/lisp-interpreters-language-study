@@ -1,5 +1,15 @@
 #ifndef UTILS_H
 #define UTILS_H
+/*******************************************************************************
+ *
+ *   +-------+
+ *   | UTILS | - header file
+ *   +-------+
+ *
+ *  Various helper functions that don't exactly fit being inside global.
+ *
+ ******************************************************************************/
+
 #include <stdbool.h>
 #include <stdio.h>
 

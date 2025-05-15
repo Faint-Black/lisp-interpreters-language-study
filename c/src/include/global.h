@@ -1,5 +1,15 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
+/*******************************************************************************
+ *
+ *   +--------+
+ *   | GLOBAL | - header file
+ *   +--------+
+ *
+ *  Defines global functions, variables, typedefs and macros for use across all
+ * source files on the project.
+ *
+ ******************************************************************************/
 
 /* detect operating system */
 #if defined(_WIN32) || defined(_WIN64)

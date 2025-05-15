@@ -1,5 +1,15 @@
 #ifndef ATOM_H
 #define ATOM_H
+/*******************************************************************************
+ *
+ *   +------+
+ *   | ATOM | - header file
+ *   +------+
+ *
+ *  Defines the primitive atom/list/s-expression Lisp data types and procedures,
+ * as well as their printing.
+ *
+ ******************************************************************************/
 
 typedef enum AtomType
 {
