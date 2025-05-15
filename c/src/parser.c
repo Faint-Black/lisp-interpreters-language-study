@@ -10,7 +10,6 @@
 static Atom Parse_Expression(Token* tokens, size_t* counter);
 static Atom Parse_Quote(Token* tokens, size_t* counter);
 static Atom Parse_List(Token* tokens, size_t* counter);
-static Atom Parse_Dotted_Pair(Token* tokens, size_t* counter);
 
 /* primitive parsing operations */
 static Token Peek(Token* tokens, size_t size);
@@ -49,10 +48,6 @@ static Atom Parse_Expression(Token* tokens, size_t* counter)
     case PTT_QUOTE:
         Consume(tokens, counter);
         return Parse_Quote(tokens, counter);
-        break;
-    case PTT_DOT:
-        Consume(tokens, counter);
-        return Parse_Dotted_Pair(tokens, counter);
         break;
     case PTT_L_PAREN:
         Consume(tokens, counter);
@@ -93,9 +88,7 @@ static Atom Parse_Quote(Token* tokens, size_t* counter)
     return Int_Atom(42);
 }
 
-/* recursively goes through parenthesis contained tokens */
-/* ( + 1 2 ) */
-/* [+]-> [1]-> [2]-> nil */
+/* recursively goes through parenthesis lists and dotted pairs */
 static Atom Parse_List(Token* tokens, size_t* counter)
 {
     Atom car;
@@ -106,18 +99,23 @@ static Atom Parse_List(Token* tokens, size_t* counter)
         return Nil_Atom();
     }
 
+    /* (A . (B . (C . nil))) */
+    car = Parse_Expression(tokens, counter);
+    if (Match(tokens, counter, PTT_DOT))
+    {
+        cdr = Parse_Expression(tokens, counter);
+        if (Match(tokens, counter, PTT_R_PAREN) == false)
+        {
+            Set_Error("expected ')' after dotted pair");
+            return Nil_Atom();
+        }
+        return Lisp_Cons(car, cdr);
+    }
+
+    /* (A B C D ...) */
     car = Parse_Expression(tokens, counter);
     cdr = Parse_List(tokens, counter);
-
     return Lisp_Cons(car, cdr);
-}
-
-/* TODO */
-static Atom Parse_Dotted_Pair(Token* tokens, size_t* counter)
-{
-    Fatal_Error_Msg("not implemented yet");
-    Consume(tokens, counter);
-    return Int_Atom(42);
 }
 
 /* return current token without incrementing the counter */
@@ -143,11 +141,4 @@ static bool Match(Token* tokens, size_t* size, TokenType target)
         return true;
     }
     return false;
-}
-
-/* appends an atom to an atom array, then increments the size counter */
-static void Append_Atom(Atom* atom_arr, size_t* size, Atom atom)
-{
-    atom_arr[*size] = atom;
-    ++*size;
 }

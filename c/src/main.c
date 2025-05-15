@@ -2,25 +2,24 @@
 #include "include/global.h"
 #include "include/lexer.h"
 #include "include/parser.h"
+#include "include/utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
+/* TODO: global allocation pool */
 /* TODO: dynamic arrays */
-/* TODO: abstract syntax tree */
 /* TODO: evaluator */
 
-/* TODO: S-Expression are ALREADY implemented!
- *       i just need to finalize the list recursive parsing functions
- */
-
-/* TODO: Print_Fn -> Get_Str_Fn */
+static void Cleanup_And_Exit(int exit_code, char* str, Token* tokens);
 
 int main(void)
 {
-    const char* input_str;
-    Token*      lexed_token_array;
-    Atom        parsed_atom;
+    char*  input_str;
+    Token* lexed_token_array;
+    Atom   parsed_atom;
 
-    input_str = "(+ (* 1 5) 2)";
+    /* get input */
+    input_str = Dup_Str("(A . (B . (C . nil)))");
 
     /* lexing phase */
     lexed_token_array = Lex_Text(input_str);
@@ -28,6 +27,7 @@ int main(void)
     {
         sprintf(buffer, "lexing failed with error message \"%s\"", Get_Error());
         Fatal_Error_Msg(buffer);
+        Cleanup_And_Exit(EXIT_FAILURE, input_str, lexed_token_array);
     }
 
     /* parsing phase */
@@ -36,6 +36,7 @@ int main(void)
     {
         sprintf(buffer, "parsing failed with error message \"%s\"", Get_Error());
         Fatal_Error_Msg(buffer);
+        Cleanup_And_Exit(EXIT_FAILURE, input_str, lexed_token_array);
     }
 
     /* output phase */
@@ -44,8 +45,21 @@ int main(void)
     Bufprint_Sexpr(buffer, parsed_atom);
     Log_Msg(buffer);
 
-    /* cleanup phase */
-    Destroy_Token_Array(lexed_token_array);
-
+    /* graciously exit */
+    Cleanup_And_Exit(EXIT_SUCCESS, input_str, lexed_token_array);
     return 0;
+}
+
+static void Cleanup_And_Exit(int exit_code, char* str, Token* tokens)
+{
+    if (str != NULL)
+    {
+        free(str);
+    }
+    if (tokens != NULL)
+    {
+        Destroy_Token_Array(tokens);
+    }
+
+    exit(exit_code);
 }
