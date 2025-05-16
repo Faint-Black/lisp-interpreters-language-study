@@ -17,13 +17,23 @@
 #include <stdio.h>
 #include <string.h>
 
-static void Recursive_Bufprint_Sexpr(int depth, char* buf, Atom atom);
+static void Recursive_Bufprint_Tree_Sexpr(int depth, char* buf, Atom atom);
+static void Recursive_Bufprint_Expression(char* buf, Atom atom);
+static void Recursive_Bufprint_List(char* buf, Atom atom);
 
-/* logs all atoms onto a single string put at the input buf */
-void Bufprint_Sexpr(char* buf, Atom atom)
+/* logs all atoms onto a single string put at the input buf, in car/cdr tree form */
+void Bufprint_Tree_Sexpr(char* buf, Atom atom)
+{
+    strncpy(buf, "Logging TREE S-EXPRESSIONS;\n", MAX_GLOBAL_BUFFER_SIZE);
+    Recursive_Bufprint_Tree_Sexpr(0, buf, atom);
+}
+
+/* logs all atoms onto a single string put at the input buf, in humanly readable form */
+void Bufprint_Human_Sexpr(char* buf, Atom atom)
 {
     strncpy(buf, "Logging S-EXPRESSIONS;\n", MAX_GLOBAL_BUFFER_SIZE);
-    Recursive_Bufprint_Sexpr(0, buf, atom);
+    Recursive_Bufprint_Expression(buf, atom);
+    strncat(buf, "\n", MAX_GLOBAL_BUFFER_SIZE);
 }
 
 /* allocates contents of input atom into new returned atom */
@@ -96,7 +106,7 @@ Atom Symbol_Atom(const char* name)
     return result;
 }
 
-static void Recursive_Bufprint_Sexpr(int depth, char* buf, Atom atom)
+static void Recursive_Bufprint_Tree_Sexpr(int depth, char* buf, Atom atom)
 {
     char temp_buf[MAX_LOCAL_BUFFER_SIZE];
     int  i;
@@ -114,30 +124,88 @@ static void Recursive_Bufprint_Sexpr(int depth, char* buf, Atom atom)
     switch (atom.type)
     {
     case ATOMTYPE_T:
-        sprintf(temp_buf, "non-empty list (t)\n");
+        strncat(buf, "non-empty list (t)\n", MAX_GLOBAL_BUFFER_SIZE);
         break;
     case ATOMTYPE_NIL:
-        sprintf(temp_buf, "empty list (nil)\n");
+        strncat(buf, "empty list (nil)\n", MAX_GLOBAL_BUFFER_SIZE);
         break;
     case ATOMTYPE_INTEGER:
         sprintf(temp_buf, "integral (%li)\n", atom.value.integral);
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
         break;
     case ATOMTYPE_FLOAT:
         sprintf(temp_buf, "real (%.4f)\n", atom.value.floating);
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
         break;
     case ATOMTYPE_SYMBOL:
         sprintf(temp_buf, "symbol (\"%s\")\n", atom.value.symbol);
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
         break;
     case ATOMTYPE_PAIR:
-        sprintf(temp_buf, "PAIR\n");
-        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
-        Recursive_Bufprint_Sexpr(depth + 1, buf, Lisp_Car(atom));
-        Recursive_Bufprint_Sexpr(depth + 1, buf, Lisp_Cdr(atom));
-        temp_buf[0] = '\0';
+        strncat(buf, "PAIR\n", MAX_GLOBAL_BUFFER_SIZE);
+        Recursive_Bufprint_Tree_Sexpr(depth + 1, buf, Lisp_Car(atom));
+        Recursive_Bufprint_Tree_Sexpr(depth + 1, buf, Lisp_Cdr(atom));
         break;
     default:
-        sprintf(temp_buf, "Printing of this type not implemented yet!\n");
+        Set_Error("erroneous case caught");
         break;
     }
-    strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
+}
+
+static void Recursive_Bufprint_Expression(char* buf, Atom atom)
+{
+    char temp_buf[MAX_LOCAL_BUFFER_SIZE];
+    temp_buf[0] = '\0';
+
+    switch (atom.type)
+    {
+    case ATOMTYPE_T:
+        strncat(buf, "t", MAX_GLOBAL_BUFFER_SIZE);
+        break;
+    case ATOMTYPE_NIL:
+        strncat(buf, "nil", MAX_GLOBAL_BUFFER_SIZE);
+        break;
+    case ATOMTYPE_INTEGER:
+        sprintf(temp_buf, "%li", atom.value.integral);
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
+        break;
+    case ATOMTYPE_FLOAT:
+        sprintf(temp_buf, "%.4f", atom.value.floating);
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
+        break;
+    case ATOMTYPE_SYMBOL:
+        sprintf(temp_buf, "%s", atom.value.symbol);
+        strncat(buf, temp_buf, MAX_GLOBAL_BUFFER_SIZE);
+        break;
+    case ATOMTYPE_PAIR:
+        strncat(buf, "(", MAX_GLOBAL_BUFFER_SIZE);
+        Recursive_Bufprint_List(buf, atom);
+        strncat(buf, ")", MAX_GLOBAL_BUFFER_SIZE);
+        break;
+    default:
+        Set_Error("erroneous case caught");
+        break;
+    }
+}
+
+static void Recursive_Bufprint_List(char* buf, Atom atom)
+{
+    Atom car = Lisp_Car(atom);
+    Atom cdr = Lisp_Cdr(atom);
+
+    Recursive_Bufprint_Expression(buf, car);
+    if (cdr.type == ATOMTYPE_PAIR)
+    {
+        strncat(buf, " ", MAX_GLOBAL_BUFFER_SIZE);
+        Recursive_Bufprint_List(buf, cdr);
+    }
+    else if (cdr.type == ATOMTYPE_NIL)
+    {
+        return;
+    }
+    else
+    {
+        strncat(buf, " . ", MAX_GLOBAL_BUFFER_SIZE);
+        Recursive_Bufprint_Expression(buf, cdr);
+    }
 }

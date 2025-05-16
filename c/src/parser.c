@@ -103,7 +103,7 @@ static Atom Parse_Expression(Token* tokens, size_t* counter)
 /* syntatic sugar for turning 'A into (quote A) */
 static Atom Parse_Quote(Token* tokens, size_t* counter)
 {
-    Atom quote_atom = Symbol_Atom("quote");
+    Atom quote_atom = Symbol_Atom("QUOTE");
     Atom right_expression = Parse_Expression(tokens, counter);
     return Lisp_Cons(quote_atom, Lisp_Cons(right_expression, Nil_Atom()));
 }

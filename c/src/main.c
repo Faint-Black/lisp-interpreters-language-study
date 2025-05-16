@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* TODO: humanly readable S-Expression prints */
 /* TODO: global allocation pool */
 /* TODO: dynamic arrays */
 /* TODO: evaluator */
@@ -30,7 +29,7 @@ int main(void)
     Atom   parsed_atom;
 
     /* get input */
-    input_str = Dup_Str("(setq foo 42)");
+    input_str = Dup_Str("'(foo   ( + 42 69) )");
 
     /* lexing phase */
     lexed_token_array = Lex_Text(input_str);
@@ -53,7 +52,9 @@ int main(void)
     /* output phase */
     Bufprint_Token_Array(buffer, lexed_token_array);
     Log_Msg(buffer);
-    Bufprint_Sexpr(buffer, parsed_atom);
+    Bufprint_Tree_Sexpr(buffer, parsed_atom);
+    Log_Msg(buffer);
+    Bufprint_Human_Sexpr(buffer, parsed_atom);
     Log_Msg(buffer);
 
     /* graciously exit */
