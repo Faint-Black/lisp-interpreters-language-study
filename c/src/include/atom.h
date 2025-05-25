@@ -46,5 +46,6 @@ extern Atom Nil_Atom(void);
 extern Atom Int_Atom(long num);
 extern Atom Float_Atom(float num);
 extern Atom Symbol_Atom(const char* name);
+extern Atom Boolean_To_Atom(int boolean);
 
 #endif /* ATOM_H */

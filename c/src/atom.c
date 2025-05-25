@@ -106,6 +106,19 @@ Atom Symbol_Atom(const char* name)
     return result;
 }
 
+/* returns a 'nil' or 't' atom depending on input */
+Atom Boolean_To_Atom(int boolean)
+{
+    if (boolean)
+    {
+        return T_Atom();
+    }
+    else
+    {
+        return Nil_Atom();
+    }
+}
+
 static void Recursive_Bufprint_Tree_Sexpr(int depth, char* buf, Atom atom)
 {
     char temp_buf[MAX_LOCAL_BUFFER_SIZE];

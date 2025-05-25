@@ -39,12 +39,35 @@ Atom Lisp_Cons(Atom car, Atom cdr)
 /* returns T if an atom is null, NIL if not */
 Atom Lisp_Nullp(Atom atom)
 {
-    if (atom.type == ATOMTYPE_NIL)
-    {
-        return T_Atom();
-    }
-    else
-    {
-        return Nil_Atom();
-    }
+    return Boolean_To_Atom(atom.type == ATOMTYPE_NIL);
+}
+
+/* returns T if an atom is FOO, NIL if not */
+Atom Lisp_Nump(Atom atom)
+{
+    return Boolean_To_Atom((atom.type == ATOMTYPE_INTEGER) || (atom.type == ATOMTYPE_FLOAT));
+}
+
+/* returns T if an atom is FOO, NIL if not */
+Atom Lisp_Integralp(Atom atom)
+{
+    return Boolean_To_Atom(atom.type == ATOMTYPE_INTEGER);
+}
+
+/* returns T if an atom is FOO, NIL if not */
+Atom Lisp_Floatingp(Atom atom)
+{
+    return Boolean_To_Atom(atom.type == ATOMTYPE_FLOAT);
+}
+
+/* returns T if an atom is FOO, NIL if not */
+Atom Lisp_Symbolp(Atom atom)
+{
+    return Boolean_To_Atom(atom.type == ATOMTYPE_SYMBOL);
+}
+
+/* returns T if an atom is FOO, NIL if not */
+Atom Lisp_Consp(Atom atom)
+{
+    return Boolean_To_Atom(atom.type == ATOMTYPE_PAIR);
 }
