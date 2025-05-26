@@ -43,7 +43,7 @@ Atom Lisp_Nullp(Atom atom)
 }
 
 /* returns T if an atom is FOO, NIL if not */
-Atom Lisp_Nump(Atom atom)
+Atom Lisp_Numberp(Atom atom)
 {
     return Boolean_To_Atom((atom.type == ATOMTYPE_INTEGER) || (atom.type == ATOMTYPE_FLOAT));
 }

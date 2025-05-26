@@ -9,10 +9,19 @@
  ******************************************************************************/
 
 #include "include/eval.h"
+#include "include/atom.h"
 #include "include/lisp.h"
 
-/* TODO */
+/* TODO: friggin' everything */
+/* watch https://youtu.be/f13dTrBHDqY */
+
 Atom Lisp_Eval(Atom expr)
 {
-    return Lisp_Nullp(expr);
+    /* numbers evaluate to themselves */
+    if (Atom_To_Boolean(Lisp_Numberp(expr)))
+    {
+        return expr;
+    }
+
+    return Nil_Atom();
 }

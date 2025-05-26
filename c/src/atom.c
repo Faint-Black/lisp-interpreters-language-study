@@ -119,6 +119,19 @@ Atom Boolean_To_Atom(int boolean)
     }
 }
 
+/* returns 'false' on nil, 'true' on anything else */
+int Atom_To_Boolean(Atom atom)
+{
+    if (atom.type == ATOMTYPE_NIL)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 static void Recursive_Bufprint_Tree_Sexpr(int depth, char* buf, Atom atom)
 {
     char temp_buf[MAX_LOCAL_BUFFER_SIZE];
